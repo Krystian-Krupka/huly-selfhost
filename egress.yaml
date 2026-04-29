@@ -1,0 +1,16 @@
+api_key: hulyapikey
+api_secret: 9a5528b0283aa1cb4fbbbeae0f90e129b76874defa222187
+ws_url: ws://livekit:7880
+redis:
+  address: redis:6379
+health_port: 8086
+logging:
+  level: info
+storage:
+  s3:
+    access_key: minioadmin
+    secret: minioadmin
+    endpoint: http://minio:9000
+    bucket: recordings
+    region: us-east-1
+    force_path_style: true
