@@ -23,6 +23,12 @@ services:
     networks:
       - huly_net
 
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks:
+      - huly_net
+
   redpanda:
     image: docker.redpanda.com/redpandadata/redpanda:v24.3.6
     command:
@@ -56,6 +62,20 @@ services:
     networks:
       - huly_net
 
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      sleep 5;
+      /usr/bin/mc alias set myminio http://minio:9000 minioadmin minioadmin;
+      /usr/bin/mc mb myminio/recordings --ignore-existing;
+      exit 0;
+      "
+    networks:
+      - huly_net
+
   elastic:
     image: "elasticsearch:7.14.2"
     command: |
@@ -81,6 +101,26 @@ services:
     ports:
       - "7880:7880"
       - "50000-50200:50000-50200/udp"
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - huly_net
+
+  egress:
+    build:
+      context: .
+      dockerfile: Dockerfile.egress
+    environment:
+      - EGRESS_CONFIG_FILE=/etc/egress.yaml
+    shm_size: '1gb'
+    depends_on:
+      - redis
+      - livekit
+    deploy:
+      resources:
+        limits:
+          memory: 3G
     restart: unless-stopped
     networks:
       - huly_net
