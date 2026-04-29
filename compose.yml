@@ -4,11 +4,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.nginx
-    ports:
-      - "${HTTP_BIND}:${HTTP_PORT}:80"
     restart: unless-stopped
     networks:
       - huly_net
+      - coolify
 
   cockroach:
     image: cockroachdb/cockroach:latest-v24.2
@@ -205,8 +204,6 @@ services:
     depends_on:
       cockroach:
         condition: service_started
-    ports:
-      - 8094:8094
     environment:
       - HULY_DB_CONNECTION=${CR_DB_URL}
       - HULY_TOKEN_SECRET=${SECRET}
@@ -224,3 +221,5 @@ volumes:
 
 networks:
   huly_net:
+  coolify:
+    external: true
