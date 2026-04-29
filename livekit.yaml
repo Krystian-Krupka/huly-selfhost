@@ -8,5 +8,9 @@ rtc:
   enable_loopback_candidate: false
 keys:
   hulyapikey: 9a5528b0283aa1cb4fbbbeae0f90e129b76874defa222187
+webhook:
+  api_key: hulyapikey
+  urls:
+    - http://love:8096/webhook
 turn:
   enabled: false
