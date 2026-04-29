@@ -1,2 +1,2 @@
-FROM ghcr.io/livekit/livekit-egress:v1.12.0
+FROM livekit/egress:v1.12.0
 COPY egress.yaml /etc/egress.yaml
