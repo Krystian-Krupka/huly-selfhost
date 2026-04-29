@@ -44,12 +44,7 @@ services:
     environment:
       - REDPANDA_SUPERUSER_USERNAME=${REDPANDA_ADMIN_USER}
       - REDPANDA_SUPERUSER_PASSWORD=${REDPANDA_ADMIN_PWD}
-    healthcheck:
-      test: ['CMD-SHELL', 'rpk cluster info 2>&1 | grep -q "BROKER" || exit 1']
-      interval: 10s
-      timeout: 10s
-      retries: 15
-      start_period: 30s
+    restart: unless-stopped
     networks:
       - huly_net
 
@@ -58,11 +53,6 @@ services:
     command: server /data --address ":9000" --console-address ":9001"
     volumes:
       - ${VOLUME_FILES_PATH:-files}:/data
-    healthcheck:
-      test: ['CMD', 'mc', 'ready', 'local']
-      interval: 5s
-      retries: 10
-      start_period: 10s
     restart: unless-stopped
     networks:
       - huly_net
@@ -81,11 +71,6 @@ services:
       - ES_JAVA_OPTS=-Xms1024m -Xmx1024m
       - http.cors.enabled=true
       - http.cors.allow-origin=http://localhost:8082
-    healthcheck:
-      interval: 20s
-      retries: 10
-      start_period: 60s
-      test: curl -s http://localhost:9200/_cluster/health | grep -vq '"status":"red"'
     restart: unless-stopped
     networks:
       - huly_net
