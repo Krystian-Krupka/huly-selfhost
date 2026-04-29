@@ -1,0 +1,10 @@
+port: 7880
+rtc:
+  port_range_start: 50000
+  port_range_end: 50200
+  use_external_ip: true
+  enable_loopback_candidate: false
+keys:
+  hulyapikey: 9a5528b0283aa1cb4fbbbeae0f90e129b76874defa222187
+turn:
+  enabled: false
